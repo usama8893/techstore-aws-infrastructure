@@ -1,0 +1,82 @@
+#!/bin/bash
+# TechStore Web Server Bootstrap Script
+# This runs once when instance first launches
+
+# Update system packages
+dnf update -y
+
+# Install Apache web server and PHP
+dnf install -y httpd php php-mysqli
+
+# Install AWS CLI (usually pre-installed, but make sure)
+dnf install -y aws-cli
+
+# Start Apache and enable on boot
+systemctl start httpd
+systemctl enable httpd
+
+# Get instance metadata
+INSTANCE_ID=$(TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null) && curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/instance-id)
+AVAILABILITY_ZONE=$(TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" 2>/dev/null) && curl -H "X-aws-ec2-metadata-token: $TOKEN" -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+REGION=$(echo $AVAILABILITY_ZONE | sed 's/[a-z]$//')
+
+# Create a simple web page
+cat > /var/www/html/index.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TechStore - Web Server</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 { margin-top: 0; }
+        .status { 
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 TechStore Web Server</h1>
+        <div class="status">
+            <strong>Status:</strong> ✅ Online and serving traffic
+        </div>
+        <div class="status">
+            <strong>Instance ID:</strong> INSTANCE_ID_PLACEHOLDER
+        </div>
+        <div class="status">
+            <strong>Availability Zone:</strong> AZ_PLACEHOLDER
+        </div>
+        <div class="status">
+            <strong>Region:</strong> REGION_PLACEHOLDER
+        </div>
+        <p>This web server is part of an Auto Scaling group behind an Application Load Balancer.</p>
+    </div>
+</body>
+</html>
+EOF
+
+# Replace placeholders with actual values
+sed -i "s/INSTANCE_ID_PLACEHOLDER/$INSTANCE_ID/g" /var/www/html/index.html
+sed -i "s/AZ_PLACEHOLDER/$AVAILABILITY_ZONE/g" /var/www/html/index.html
+sed -i "s/REGION_PLACEHOLDER/$REGION/g" /var/www/html/index.html
+
+# Set proper permissions
+chmod 644 /var/www/html/index.html
+chown -R apache:apache /var/www/html
+
+# Log completion
+echo "TechStore web server bootstrap completed at $(date)" >> /var/log/techstore-bootstrap.log
