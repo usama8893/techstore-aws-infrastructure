@@ -183,13 +183,6 @@ This project demonstrates:
 - Monitoring and alerting
 - Troubleshooting skills
 
-## 📚 Documentation
-
-- [Setup Guide](docs/SETUP.md) - Step-by-step deployment
-- [Cost Analysis](docs/COST-ANALYSIS.md) - Detailed cost breakdown
-- [Security](docs/SECURITY.md) - Security architecture
-- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues
-
 ## 🤝 Contributing
 
 This is a learning project, but suggestions are welcome! Feel free to:
@@ -204,9 +197,8 @@ MIT License - See [LICENSE](LICENSE) file
 ## 👤 Author
 
 **[Your Name]**
-- GitHub: [@your-username](https://github.com/your-username)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
-- Portfolio: [your-website.com](https://your-website.com)
+- GitHub: [@usama8893](https://github.com/usama8893)
+- LinkedIn: [Muhammad Usama]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/muhammad-usama-689428232/))
 
 ## 🙏 Acknowledgments
 
@@ -214,7 +206,3 @@ Built as part of AWS Cloud Engineering learning curriculum.
 - AWS Well-Architected Framework
 - AWS Solutions Architect certification materials
 - AWS documentation and best practices
-
----
-
-**⭐ If this helped you learn AWS, please star this repository!**
